@@ -1,0 +1,471 @@
+/* CSS Variables - Color Palette + Performance */
+:root {
+    --color-1: #A66139;
+    --color-2: #EAE1D2;
+    --color-3: #C38C53;
+    --color-4: #B2C1A1;
+    --color-5: #596041;
+    
+    --primary-color: var(--color-1);
+    --secondary-color: var(--color-3);
+    --accent-color: var(--color-5);
+    --background-light: var(--color-2);
+    --background-sage: var(--color-4);
+    
+    --text-dark: var(--color-1);
+    --text-light: var(--color-2);
+    --text-muted: var(--color-5);
+    
+    /* Performance optimizations */
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --will-change-auto: auto;
+    --will-change-transform: transform;
+}
+
+/* Reset and Base Styles - Performance Optimized */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-display: swap;
+    /* Scroll comportamento normal */
+}
+
+/* Scroll ultra suave personalizado */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(166, 97, 57, 0.3) transparent;
+}
+
+html::-webkit-scrollbar {
+    width: 8px;
+}
+
+html::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: rgba(166, 97, 57, 0.3);
+    border-radius: 4px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background: rgba(166, 97, 57, 0.5);
+}
+
+/* Animações suaves durante scroll */
+body {
+    transition: all 0.3s ease-out;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #ffffff;
+    background: url('bg.png') center center/cover no-repeat fixed;
+    min-height: 100vh;
+    /* Performance optimizations */
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    will-change: var(--will-change-auto);
+}
+
+/* Background com blur 80% para desktop */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('bg.png') center center/cover no-repeat fixed;
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+    z-index: -1;
+}
+
+/* Mobile - sem blur */
+@media (max-width: 768px) {
+    body::before {
+        filter: none;
+        -webkit-filter: none;
+    }
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+/* Catalog Header */
+.catalog-header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: linear-gradient(180deg, rgba(166, 97, 57, 0.1) 0%, rgba(195, 140, 83, 0.05) 50%, transparent 100%);
+    backdrop-filter: blur(10px);
+}
+
+.brand-name {
+    font-size: 3.2rem;
+    color: #ffffff;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 
+                 0 0 60px rgba(255, 255, 255, 0.3),
+                 2px 2px 4px rgba(0, 0, 0, 0.8);
+    font-weight: 700;
+    line-height: 1.2;
+    transition: var(--transition-smooth);
+    transform-style: preserve-3d;
+    /* Performance optimizations */
+    will-change: var(--will-change-auto);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.brand-name.glow-effect {
+    animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+    0% {
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 
+                     0 0 60px rgba(255, 255, 255, 0.3),
+                     2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    100% {
+        text-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 
+                     0 0 80px rgba(255, 255, 255, 0.5),
+                     2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+}
+
+.catalog-subtitle {
+    font-size: 1.4rem;
+    color: #ffffff;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4),
+                 1px 1px 3px rgba(0, 0, 0, 0.6);
+    line-height: 1.4;
+    margin-bottom: 8px;
+    transition: var(--transition-smooth);
+    will-change: var(--will-change-auto);
+    transform: translateZ(0);
+}
+
+.services-subtitle {
+    font-size: 1.1rem;
+    color: #ffffff;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3),
+                 1px 1px 2px rgba(0, 0, 0, 0.8);
+    line-height: 1.4;
+    opacity: 0.9;
+    font-family: 'Montserrat', sans-serif;
+    transition: var(--transition-smooth);
+    will-change: var(--will-change-auto);
+    transform: translateZ(0);
+}
+
+/* Loading state */
+body:not(.loaded) .brand-name,
+body:not(.loaded) .catalog-subtitle,
+body:not(.loaded) .services-subtitle {
+    opacity: 0;
+}
+
+/* Glitch effect styles */
+.glitch-effect {
+    position: relative;
+    animation: glitchAnimation 0.3s ease-in-out;
+}
+
+@keyframes glitchAnimation {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+}
+
+/* Catalog Container */
+.catalog-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+}
+
+.catalog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    perspective: 1000px;
+}
+
+/* Catalog Items - Performance Optimized */
+.catalog-item {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transition: var(--transition-smooth);
+    transform: translateY(0);
+    opacity: 0;
+    animation: slideInUp 0.6s ease-out forwards;
+    /* Performance optimizations */
+    will-change: var(--will-change-auto);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    contain: layout style paint;
+}
+
+.catalog-item:nth-child(1) { animation-delay: 0.1s; }
+.catalog-item:nth-child(2) { animation-delay: 0.2s; }
+.catalog-item:nth-child(3) { animation-delay: 0.3s; }
+.catalog-item:nth-child(4) { animation-delay: 0.4s; }
+.catalog-item:nth-child(5) { animation-delay: 0.5s; }
+.catalog-item:nth-child(6) { animation-delay: 0.6s; }
+.catalog-item:nth-child(7) { animation-delay: 0.7s; }
+.catalog-item:nth-child(8) { animation-delay: 0.8s; }
+.catalog-item:nth-child(9) { animation-delay: 0.9s; }
+
+.catalog-item:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 30px 60px rgba(166, 97, 57, 0.4);
+    border-color: rgba(166, 97, 57, 0.3);
+    will-change: var(--will-change-transform);
+}
+
+.catalog-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: var(--transition-smooth);
+    filter: brightness(0.95) contrast(1.05);
+    /* Performance optimizations */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.catalog-item:hover img {
+    transform: scale(1.02);
+    filter: brightness(1) contrast(1.1);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Download Section */
+.download-section {
+    padding: 80px 20px;
+    background: linear-gradient(180deg, transparent 0%, rgba(166, 97, 57, 0.1) 50%, transparent 100%);
+    backdrop-filter: blur(10px);
+}
+
+.download-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.download-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+}
+
+.download-description {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 40px;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(135deg, rgba(166, 97, 57, 0.8) 0%, rgba(195, 140, 83, 0.8) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 20px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    backdrop-filter: blur(20px);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(166, 97, 57, 0.3);
+    /* Performance optimizations */
+    will-change: var(--will-change-auto);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    contain: layout style paint;
+}
+
+.download-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.download-btn:hover::before {
+    left: 100%;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    background: linear-gradient(135deg, rgba(166, 97, 57, 0.9) 0%, rgba(195, 140, 83, 0.9) 100%);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 15px 40px rgba(166, 97, 57, 0.4);
+    will-change: var(--will-change-transform);
+}
+
+.btn-icon {
+    font-size: 1.5rem;
+    animation: bounce 2s infinite;
+}
+
+.btn-text {
+    flex: 1;
+    text-align: center;
+}
+
+.btn-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.download-btn:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Catalog Footer */
+.catalog-footer {
+    background: linear-gradient(180deg, rgba(89, 96, 65, 0.2) 0%, rgba(89, 96, 65, 0.1) 100%);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.catalog-footer p {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.catalog-footer p:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .brand-name {
+        font-size: 2.5rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .catalog-subtitle {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+    
+    .services-subtitle {
+        font-size: 1rem;
+        letter-spacing: 2px;
+    }
+    
+    .catalog-header {
+        padding: 40px 20px 30px;
+    }
+    
+    .catalog-list {
+        gap: 15px;
+    }
+    
+    .catalog-container {
+        padding: 0 15px 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-name {
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+    
+    .catalog-subtitle {
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .services-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .catalog-header {
+        padding: 30px 15px 20px;
+    }
+    
+    .catalog-list {
+        gap: 12px;
+    }
+    
+    .catalog-container {
+        padding: 0 10px 30px;
+    }
+}
